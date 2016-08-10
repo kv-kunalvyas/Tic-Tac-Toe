@@ -1,3 +1,4 @@
+# Author: Kunal Vyas
 import random
 
 
@@ -5,14 +6,11 @@ class Player(object):
     """
     Defines the class for the player with methods to move and check if won
     """
-    def __init__(self, mark):
+    def __init__(self, human, mark):
+        # human is a boolean that decides if the game is being played against humans or computers
+        self.human = human
         # mark is the symbol used by players (i.e a nought(O) or a cross(X))
         self.mark = mark
-
-    @property
-    def get_mark(self):
-        # type: () -> string
-        return self.mark
 
     def auto_move(self, matrix, opponent):
         """
@@ -40,7 +38,7 @@ class Player(object):
                 if matrix[i][j] == '*':
                     # replace an unmoved spot with opponent's possible move
                     # and check if it leads to winning the game and prevent it
-                    matrix[i][j] = opponent.get_mark
+                    matrix[i][j] = opponent.mark
                     if opponent.check_if_over(matrix) is True:
                         return i, j
                     matrix[i][j] = '*'
@@ -74,19 +72,20 @@ class Player(object):
                 # if value is invalid, it displays example of valid input and lets
                 # player try again
                 print 'For Example: Type "0 ' + \
-                    str(range(current_grid.get_size)[-1]) + \
+                    str(range(current_grid.size)[-1]) + \
                     '" to move on top right corner'
                 continue
 
             # Checks further if move is valid and returns the row and column
-            if row in range(current_grid.get_size) and column in range(current_grid.get_size):
-                if current_grid.get_matrix[row][column] == '*':
+            if row in range(current_grid.size) and column in range(current_grid.size):
+                # checks if the move position is vacant
+                if current_grid.state[row][column] == '*':
                     return tuple([row, column])
                 else:
                     print 'Move Not Allowed: You can only make a move at a new position, please try again'
             else:
                 print 'Illegal Input: Both row and column should be from values', \
-                    range(current_grid.get_size), 'Try again'
+                    range(current_grid.size), 'Try again'
 
     def check_if_over(self, matrix):
         """
@@ -102,7 +101,7 @@ class Player(object):
             :param items: list of items in a row
             :return: True if player wins
             """
-            return set(items) == set(self.get_mark)
+            return set(items) == set(self.mark)
 
         # check horizontals
         for row in matrix:

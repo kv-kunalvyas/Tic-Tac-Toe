@@ -17,40 +17,48 @@ import player
 # Set values of some customisable features of the game
 board_size = 3                          # board size (n by n)
 grid = board.Board(size=board_size)     # initialise the board
-player_1 = player.Player(mark='O')      # human player
-player_2 = player.Player(mark='X')      # computer
+player_1 = player.Player(human=True, mark='X')      # human player
+player_2 = player.Player(human=False, mark='O')      # computer
 
 # start the game and don't stop until its over
-print 'Choose a pair of numbers separated by space and press return.\n'
+print 'Choose a pair of numbers separated by space and press return.'
+print 'Your symbol =', player_1.mark
+print 'Opponent\'s symbol =', player_2.mark
 while True:
     # Human's move:
-    if '*' in [item for sublist in grid.get_matrix for item in sublist]:
+    if '*' in [item for sublist in grid.state for item in sublist]:
         # points are in row, column format
         # update marks the user's move on the board
-        grid.update(player_1, player_1.human_move(grid))
+        if player_1.human is False:
+            grid.update(player_1, player_1.auto_move(grid.state, player_2))
+        else:
+            grid.update(player_1, player_1.human_move(grid))
 
         # check if player 1 won
-        if player_1.check_if_over(grid.get_matrix) is True:
+        if player_1.check_if_over(grid.state) is True:
             # print success message and exit
             grid.print_board()
-            print player_1.get_mark, '= Human Wins'
+            print player_1.mark, '= Player 1 Wins'
             sys.exit(0)
         else:
             # print board after every move if the game isn't over
             grid.print_board()
 
+        # print a divider to differentiate between human's and computer's moves
         print '.' * board_size * 2
 
-    # Computer's Move:
-    if '*' in [item for sublist in grid.get_matrix for item in sublist]:
+    # Player 2's Move:
+    if '*' in [item for sublist in grid.state for item in sublist]:
         # update the matrix with player_2's move
-        grid.update(player_2, player_2.auto_move(grid.get_matrix, player_1))
-
+        if player_2.human is False:
+            grid.update(player_2, player_2.auto_move(grid.state, player_1))
+        else:
+            grid.update(player_2, player_2.human_move(grid))
         # check if player 2 won
-        if player_2.check_if_over(grid.get_matrix) is True:
+        if player_2.check_if_over(grid.state) is True:
             # print success message and exit
             grid.print_board()
-            print player_2.get_mark, '= Computer Wins'
+            print player_2.mark, '= Player 2 Wins'
             sys.exit(0)
         else:
             # print board after every move

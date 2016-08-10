@@ -15,22 +15,13 @@ class Board(object):
             for y in range(self.size):
                 self.state[x].append('*')
 
-    @property
-    def get_size(self):
-        return self.size
-
-    @property
-    def get_matrix(self):
-        # type: () -> list of lists
-        return self.state
-
     def update(self, player_number, point):
         """
         Takes in player object and tuple of coordinates and updates the move on
         the board
         :return: prints the current grid on the console
         """
-        self.state[point[0]][point[1]] = player_number.get_mark
+        self.state[point[0]][point[1]] = player_number.mark
 
     def print_board(self):
         """
