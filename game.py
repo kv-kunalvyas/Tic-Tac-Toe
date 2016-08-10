@@ -2,9 +2,9 @@
 
 """
 INSTRUCTIONS, RULES & LIMITATIONS
-Human gets to move first
+Player 1 gets to move first
 To make a move, type in two digits separated by a space on the console
-This version is played as a human against a computer
+This version can played as a human against a computer, human against human or computer against computer
 This works only for square boards, i.e n X n boards
 The first player to have n-in-a-row(of a nXn matrix) marks on the matrix wins
 """
@@ -15,10 +15,12 @@ import board
 import player
 
 # Set values of some customisable features of the game
+#################### CONFIGURABLES ####################
 board_size = 3                          # board size (n by n)
 grid = board.Board(size=board_size)     # initialise the board
 player_1 = player.Player(human=True, mark='X')      # human player
 player_2 = player.Player(human=False, mark='O')      # computer
+######################################################
 
 # start the game and don't stop until its over
 print 'Choose a pair of numbers separated by space and press return.'
